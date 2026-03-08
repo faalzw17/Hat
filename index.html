@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎈 Happy Birthday! </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #ffdab9 0%, #ffe5b4 100%);
+            font-family: 'Segoe UI', 'Comic Sans MS', cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .birthday-screen {
+            width: 100%;
+            max-width: 400px;
+            height: 700px;
+            background: rgba(255, 245, 235, 0.5);
+            backdrop-filter: blur(4px);
+            border-radius: 48px 48px 30px 30px;
+            box-shadow: 0 20px 30px rgba(255, 140, 100, 0.3);
+            padding: 20px 15px 30px;
+            border: 3px solid white;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            z-index: 20;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
+            border-radius: 60px;
+            display: inline-block;
+            color: #d45d5d;
+            text-shadow: 3px 3px 0 #fff3e0;
+            box-shadow: 0 5px 0 #ffb6a0;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            color: #b84a4a;
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        .balloon-sky {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 30px;
+            margin: 10px 0;
+            background: rgba(255, 235, 215, 0.3);
+            border: 2px dashed #ffb59e;
+        }
+
+        .balloon {
+            position: absolute;
+            width: 80px;
+            height: 100px;
+            border-radius: 50% 50% 40% 40%;
+            box-shadow: 0 10px 0 rgba(0, 0, 0, 0.1), inset -5px -10px 0 rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            filter: drop-shadow(0 15px 8px rgba(255, 100, 100, 0.3));
+            transition: transform 0.1s ease, opacity 0.3s;
+            bottom: -150px;
+            animation: floatUp 8s linear forwards;
+            animation-play-state: running;
+        }
+
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 35px;
+            background: linear-gradient(45deg, #a17a5e, #d3b094);
+            border-radius: 2px;
+            z-index: 5;
+        }
+
+        .balloon::before {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: #f3c6a5;
+            border-radius: 50%;
+            z-index: 6;
+        }
+
+        @keyframes floatUp {
+            0% {
+                bottom: -150px;
+                transform: translateX(0) rotate(0deg);
+            }
+            20% {
+                transform: translateX(10px) rotate(3deg);
+            }
+            40% {
+                transform: translateX(-8px) rotate(-2deg);
+            }
+            60% {
+                transform: translateX(6px) rotate(2deg);
+            }
+            80% {
+                transform: translateX(-4px) rotate(-1deg);
+            }
+            100% {
+                bottom: 110%;
+                transform: translateX(0) rotate(0deg);
+            }
+        }
+
+        .balloon.popped {
+            opacity: 0;
+            pointer-events: none;
+            animation-play-state: paused;
+        }
+
+        .balloon:active {
+            transform: scale(0.95);
+        }
+
+        .burst-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .love-particle {
+            position: absolute;
+            font-size: 1.8rem;
+            animation: floatLove 1s ease-out forwards;
+            filter: drop-shadow(0 5px 5px hotpink);
+            z-index: 10000;
+        }
+
+        @keyframes floatLove {
+            0% {
+                transform: translate(0, 0) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--dx), var(--dy)) scale(1.8);
+                opacity: 0;
+            }
+        }
+
+        /* instruksi pencet kue */
+        .cake-instruction {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 25px;
+            border-radius: 50px;
+            color: #c1446d;
+            font-weight: bold;
+            font-size: 1.3rem;
+            border: 3px solid #ffa07a;
+            box-shadow: 0 10px 0 #ff8c6a;
+            z-index: 100;
+            display: none;
+            animation: bounce 1s infinite;
+            white-space: nowrap;
+        }
+
+        .cake-instruction.show {
+            display: block;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* kue yang muncul dari kecil membesar */
+        .flying-cake {
+            position: fixed;
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            font-size: 5rem;
+            filter: drop-shadow(0 20px 15px #ffb18c);
+            cursor: pointer;
+            z-index: 2000;
+            text-shadow: 3px 8px 0 #ffe0c0;
+            display: none;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: wobble 2s infinite;
+        }
+
+        .flying-cake.show {
+            display: block;
+            transform: translateX(-50%) scale(1);
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: translateX(-50%) scale(1) rotate(0deg); }
+            25% { transform: translateX(-55%) scale(1.05) rotate(5deg); }
+            75% { transform: translateX(-45%) scale(0.95) rotate(-5deg); }
+        }
+
+        /* party popper container */
+        .party-popper-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3001;
+        }
+
+        .popper-particle {
+            position: absolute;
+            font-size: 2rem;
+            animation: popperFly 1s ease-out forwards;
+        }
+
+        @keyframes popperFly {
+            0% {
+                transform: translate(0, 0) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--px), var(--py)) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .birthday-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -70%) scale(0);
+            background: linear-gradient(145deg, #fff0e0, #ffe0c0);
+            padding: 25px 45px;
+            border-radius: 80px;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #c1446d;
+            box-shadow: 0 15px 0 #ffa07a, 0 20px 30px rgba(255, 99, 71, 0.5);
+            border: 5px solid white;
+            z-index: 3000;
+            display: none;
+            text-align: center;
+            white-space: nowrap;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .birthday-message.show-message {
+            display: block;
+            transform: translate(-50%, -70%) scale(1);
+        }
+
+        /* tombol keluar */
+        .exit-button {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffb6c1;
+            border: 4px solid white;
+            padding: 15px 40px;
+            border-radius: 60px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #a13d5e;
+            box-shadow: 0 10px 0 #ff7f8f;
+            cursor: pointer;
+            z-index: 4000;
+            display: none;
+            transition: 0.1s;
+            white-space: nowrap;
+        }
+
+        .exit-button:active {
+            transform: translateX(-50%) translateY(5px);
+            box-shadow: 0 5px 0 #ff7f8f;
+        }
+
+        .exit-button.show {
+            display: block;
+        }
+
+        /* pesan maaf */
+        .apology-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(255, 240, 230, 0.98);
+            padding: 35px 25px;
+            border-radius: 50px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #b84a5a;
+            border: 6px solid white;
+            box-shadow: 0 20px 0 #ffa07a;
+            z-index: 5000;
+            text-align: center;
+            line-height: 1.4;
+            width: 80%;
+            max-width: 350px;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: none;
+        }
+
+        .apology-message.show {
+            display: block;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .balloon-counter {
+            text-align: center;
+            background: rgba(255, 230, 210, 0.8);
+            border-radius: 40px;
+            padding: 12px;
+            font-weight: bold;
+            color: #b34242;
+            border: 2px solid white;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            z-index: 20;
+            position: relative;
+        }
+
+        #birthday-audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="birthday-audio" loop preload="auto">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mp3">
+    </audio>
+    
+    <div class="birthday-screen">
+        <div class="header">
+            <h1>🎂 HBD!</h1>
+            <p>✨ tap balon yang melayang ✨</p>
+        </div>
+
+        <div id="balloonSky" class="balloon-sky"></div>
+
+        <div class="balloon-counter">
+            🎈 sisa balon: <span id="balloonCount">9</span>
+        </div>
+    </div>
+
+    <!-- instruksi pencet kue -->
+    <div id="cakeInstruction" class="cake-instruction">
+        👆 pencet kue nya! 👆
+    </div>
+
+    <div id="burstContainer" class="burst-container"></div>
+    <div id="partyPopperContainer" class="party-popper-container"></div>
+    
+    <!-- kue tunggal -->
+    <div id="flyingCake" class="flying-cake">🍰</div>
+    
+    <div id="birthdayMessage" class="birthday-message">🎉 HAPPY BIRTHDAY! 🎉</div>
+    
+    <!-- tombol keluar -->
+    <div id="exitButton" class="exit-button">✨ keluar ✨</div>
+    
+    <!-- pesan maaf -->
+    <div id="apologyMessage" class="apology-message">maaf ya telat ngucapin<br>semoga panjang umur ❤️</div>
+
+    <script>
+        (function() {
+            const balloonColors = [
+                '#FF69B4', '#FFD700', '#87CEEB', '#98FB98', '#FFA07A', 
+                '#DDA0DD', '#F0E68C', '#FFB6C1', '#F4A460', '#E6E6FA'
+            ];
+
+            let activeBalloons = 9;
+            const totalBalloons = 9;
+            const balloonSky = document.getElementById('balloonSky');
+            const countSpan = document.getElementById('balloonCount');
+            const burstContainer = document.getElementById('burstContainer');
+            const partyPopperContainer = document.getElementById('partyPopperContainer');
+            const flyingCake = document.getElementById('flyingCake');
+            const birthdayMessage = document.getElementById('birthdayMessage');
+            const cakeInstruction = document.getElementById('cakeInstruction');
+            const exitButton = document.getElementById('exitButton');
+            const apologyMessage = document.getElementById('apologyMessage');
+            
+            let audioCtx = null;
+            let isPlaying = false;
+            let cakeClicked = false;
+
+            // Inisialisasi balon
+            function initBalloons() {
+                balloonSky.innerHTML = '';
+                for (let i = 0; i < totalBalloons; i++) {
+                    const balloon = document.createElement('div');
+                    balloon.className = 'balloon';
+                    
+                    const colorIndex = i % balloonColors.length;
+                    balloon.style.backgroundColor = balloonColors[colorIndex];
+                    balloon.dataset.color = balloonColors[colorIndex];
+                    
+                    const leftPos = Math.random() * 85;
+                    balloon.style.left = leftPos + '%';
+                    
+                    const duration = 6 + Math.random() * 4;
+                    const delay = Math.random() * 3;
+                    balloon.style.animation = `floatUp ${duration}s linear ${delay}s forwards`;
+                    
+                    const rotate = (Math.random() - 0.5) * 8;
+                    balloon.style.transform = `rotate(${rotate}deg)`;
+                    
+                    balloon.addEventListener('click', balloonClickHandler);
+                    balloonSky.appendChild(balloon);
+                }
+                activeBalloons = totalBalloons;
+                countSpan.innerText = activeBalloons;
+            }
+
+            function balloonClickHandler(e) {
+                const balloon = e.currentTarget;
+                if (balloon.classList.contains('popped')) return;
+
+                const balloonColor = balloon.dataset.color || '#FF69B4';
+
+                // love particles
+                const loveCount = 6 + Math.floor(Math.random() * 5);
+                for (let i = 0; i < loveCount; i++) {
+                    createLoveParticle(balloon, balloonColor);
+                }
+
+                balloon.classList.add('popped');
+                
+                activeBalloons--;
+                countSpan.innerText = activeBalloons;
+
+                if (activeBalloons === 0) {
+                    showCakeAndInstruction();
+                }
+            }
+
+            function createLoveParticle(balloon, baseColor) {
+                const rect = balloon.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                const dx = (Math.random() - 0.5) * 220;
+                const dy = (Math.random() - 0.5) * 220 - 60;
+
+                const love = document.createElement('div');
+                love.className = 'love-particle';
+                love.innerHTML = '❤️';
+                love.style.left = centerX + 'px';
+                love.style.top = centerY + 'px';
+                love.style.color = baseColor;
+                love.style.setProperty('--dx', dx + 'px');
+                love.style.setProperty('--dy', dy + 'px');
+                love.style.fontSize = (1.8 + Math.random() * 1.5) + 'rem';
+                burstContainer.appendChild(love);
+
+                setTimeout(() => {
+                    if (love.parentNode) love.remove();
+                }, 1000);
+            }
+
+            // Party popper effect
+            function createPartyPopper() {
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(() => {
+                        const popper = document.createElement('div');
+                        popper.className = 'popper-particle';
+                        
+                        // random party emoji
+                        const emojis = ['🎉', '🎊', '✨', '🎈', '🎂', '💖', '🥳', '🎺'];
+                        popper.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                        
+                        const startX = window.innerWidth / 2;
+                        const startY = window.innerHeight / 2;
+                        
+                        popper.style.left = startX + 'px';
+                        popper.style.top = startY + 'px';
+                        
+                        const px = (Math.random() - 0.5) * 400;
+                        const py = (Math.random() - 0.5) * 400 - 100;
+                        
+                        popper.style.setProperty('--px', px + 'px');
+                        popper.style.setProperty('--py', py + 'px');
+                        popper.style.fontSize = (2 + Math.random() * 2) + 'rem';
+                        
+                        partyPopperContainer.appendChild(popper);
+                        
+                        setTimeout(() => {
+                            if (popper.parentNode) popper.remove();
+                        }, 1000);
+                    }, i * 50);
+                }
+            }
+
+            // Suara terompet (menggunakan Web Audio API)
+            function playTrumpetSound() {
+                try {
+                    if (!audioCtx) {
+                        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+                    
+                    if (audioCtx.state === 'suspended') {
+                        audioCtx.resume().then(() => { playTrumpet(); });
+                    } else {
+                        playTrumpet();
+                    }
+                } catch (e) {
+                    console.log('trumpet error', e);
+                }
+            }
+
+            function playTrumpet() {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                osc.type = 'sawtooth';
+                osc.frequency.value = 440;
+                
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 1);
+                
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                // nada terompet pendek
+                osc.frequency.setValueAtTime(523, now);
+                osc.frequency.setValueAtTime(659, now + 0.1);
+                osc.frequency.setValueAtTime(784, now + 0.2);
+                osc.frequency.setValueAtTime(523, now + 0.4);
+                
+                osc.start(now);
+                osc.stop(now + 0.8);
+            }
+
+            function playHappyBirthdayTune() {
+                if (isPlaying) return;
+                try {
+                    if (!audioCtx) {
+                        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+
+                    if (audioCtx.state === 'suspended') {
+                        audioCtx.resume().then(() => { playTune(); });
+                    } else {
+                        playTune();
+                    }
+                } catch (e) {
+                    const audioElem = document.getElementById('birthday-audio');
+                    audioElem.volume = 0.5;
+                    audioElem.play().catch(er => console.log('fallback audio gagal'));
+                }
+            }
+
+            function playTune() {
+                if (isPlaying) return;
+                isPlaying = true;
+
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.value = 440;
+
+                const notes = [
+                    392, 392, 440, 392, 523, 494,
+                    392, 392, 440, 392, 587, 523,
+                    392, 392, 784, 659, 523, 494, 440,
+                    698, 698, 659, 523, 587, 523
+                ];
+                const durations = [
+                    0.4, 0.4, 0.8, 0.8, 0.8, 1.2,
+                    0.4, 0.4, 0.8, 0.8, 0.8, 1.2,
+                    0.4, 0.4, 0.6, 0.2, 0.4, 0.4, 0.8,
+                    0.4, 0.4, 0.6, 0.2, 0.4, 0.4, 1.0
+                ];
+
+                let time = now + 0.1;
+
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                notes.forEach((freq, index) => {
+                    osc.frequency.setValueAtTime(freq, time);
+                    gainNode.gain.setValueAtTime(0.25, time);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, time + durations[index] - 0.05);
+                    time += durations[index];
+                });
+
+                osc.start(now);
+                osc.stop(time);
+                osc.onended = () => {
+                    isPlaying = false;
+                };
+            }
+
+            function showCakeAndInstruction() {
+                // munculkan instruksi
+                cakeInstruction.classList.add('show');
+                
+                // munculkan kue dari kecil membesar
+                flyingCake.classList.add('show');
+                
+                // tambahkan event ke kue (hanya sekali)
+                flyingCake.addEventListener('click', function onCakeClick() {
+                    if (cakeClicked) return;
+                    cakeClicked = true;
+                    
+                    // sembunyikan instruksi
+                    cakeInstruction.classList.remove('show');
+                    
+                    // sembunyikan kue
+                    flyingCake.classList.remove('show');
+                    
+                    // munculkan pesan happy birthday
+                    birthdayMessage.classList.add('show-message');
+                    
+                    // party popper effect
+                    createPartyPopper();
+                    
+                    // suara terompet
+                    playTrumpetSound();
+                    
+                    // setelah party popper, putar lagu happy birthday
+                    setTimeout(() => {
+                        playHappyBirthdayTune();
+                    }, 800);
+                    
+                    // setelah 5 detik, munculkan tombol keluar
+                    setTimeout(() => {
+                        exitButton.classList.add('show');
+                    }, 5000);
+                    
+                    flyingCake.removeEventListener('click', onCakeClick);
+                });
+            }
+
+            // tombol keluar
+            exitButton.addEventListener('click', function() {
+                // sembunyikan tombol keluar dan pesan happy birthday
+                exitButton.classList.remove('show');
+                birthdayMessage.classList.remove('show-message');
+                
+                // munculkan pesan maaf
+                apologyMessage.classList.add('show');
+                
+                // sembunyikan setelah 4 detik
+                setTimeout(() => {
+                    apologyMessage.classList.remove('show');
+                }, 4000);
+            });
+
+            initBalloons();
+        })();
+    </script>
+</body>
+  </html>
