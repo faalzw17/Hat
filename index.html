@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🎈 Happy Birthday! Balon Terbang</title>
+    <title>🎈 Happy Birthday!</title>
     <style>
         * {
             margin: 0;
@@ -22,10 +22,9 @@
             align-items: center;
             padding: 10px;
             position: relative;
-            overflow: hidden; /* biar balon tidak keluar layar */
+            overflow: hidden;
         }
 
-        /* layar utama */
         .birthday-screen {
             width: 100%;
             max-width: 400px;
@@ -40,7 +39,7 @@
             z-index: 10;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* biar balon tidak keluar dari card */
+            overflow: hidden;
         }
 
         .header {
@@ -69,7 +68,6 @@
             margin-top: 8px;
         }
 
-        /* container balon - area untuk balon melayang */
         .balloon-sky {
             flex: 1;
             position: relative;
@@ -82,7 +80,6 @@
             border: 2px dashed #ffb59e;
         }
 
-        /* balon individu */
         .balloon {
             position: absolute;
             width: 80px;
@@ -92,12 +89,11 @@
             cursor: pointer;
             filter: drop-shadow(0 15px 8px rgba(255, 100, 100, 0.3));
             transition: transform 0.1s ease, opacity 0.3s;
-            bottom: -150px; /* mulai dari bawah */
+            bottom: -150px;
             animation: floatUp 8s linear forwards;
             animation-play-state: running;
         }
 
-        /* tali balon */
         .balloon::after {
             content: '';
             position: absolute;
@@ -124,7 +120,6 @@
             z-index: 6;
         }
 
-        /* animasi naik dari bawah ke atas */
         @keyframes floatUp {
             0% {
                 bottom: -150px;
@@ -148,7 +143,6 @@
             }
         }
 
-        /* balon yang di-pause saat hover/klik? tidak, tapi kita bisa bedakan yang sudah meledak */
         .balloon.popped {
             opacity: 0;
             pointer-events: none;
@@ -159,7 +153,6 @@
             transform: scale(0.95);
         }
 
-        /* container partikel love */
         .burst-container {
             position: fixed;
             top: 0;
@@ -189,40 +182,87 @@
             }
         }
 
-        /* kue terbang */
-        .flying-cake {
-            position: fixed;
-            bottom: -100px;
+        /* instruksi pencet kue */
+        .cake-instruction {
+            position: absolute;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 25px;
+            border-radius: 50px;
+            color: #c1446d;
+            font-weight: bold;
+            font-size: 1.3rem;
+            border: 3px solid #ffa07a;
+            box-shadow: 0 10px 0 #ff8c6a;
+            z-index: 100;
+            display: none;
+            animation: bounce 1s infinite;
+            white-space: nowrap;
+        }
+
+        .cake-instruction.show {
+            display: block;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* kue yang muncul dari kecil membesar */
+        .flying-cake {
+            position: fixed;
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
             font-size: 5rem;
             filter: drop-shadow(0 20px 15px #ffb18c);
             cursor: pointer;
-            transition: bottom 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
             z-index: 2000;
             text-shadow: 3px 8px 0 #ffe0c0;
             display: none;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             animation: wobble 2s infinite;
         }
 
         .flying-cake.show {
-            bottom: 40%;
             display: block;
+            transform: translateX(-50%) scale(1);
         }
 
         @keyframes wobble {
+            0%, 100% { transform: translateX(-50%) scale(1) rotate(0deg); }
+            25% { transform: translateX(-55%) scale(1.05) rotate(5deg); }
+            75% { transform: translateX(-45%) scale(0.95) rotate(-5deg); }
+        }
 
-            0%,
+        /* party popper container */
+        .party-popper-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3001;
+        }
+
+        .popper-particle {
+            position: absolute;
+            font-size: 2rem;
+            animation: popperFly 1s ease-out forwards;
+        }
+
+        @keyframes popperFly {
+            0% {
+                transform: translate(0, 0) scale(0.5);
+                opacity: 1;
+            }
             100% {
-                transform: translateX(-50%) rotate(0deg);
-            }
-
-            25% {
-                transform: translateX(-55%) rotate(5deg);
-            }
-
-            75% {
-                transform: translateX(-45%) rotate(-5deg);
+                transform: translate(var(--px), var(--py)) scale(1.2);
+                opacity: 0;
             }
         }
 
@@ -230,35 +270,83 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -70%);
-            background: rgba(255, 240, 220, 0.95);
-            padding: 20px 35px;
+            transform: translate(-50%, -70%) scale(0);
+            background: linear-gradient(145deg, #fff0e0, #ffe0c0);
+            padding: 25px 45px;
             border-radius: 80px;
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
             color: #c1446d;
             box-shadow: 0 15px 0 #ffa07a, 0 20px 30px rgba(255, 99, 71, 0.5);
-            border: 4px solid white;
+            border: 5px solid white;
             z-index: 3000;
             display: none;
             text-align: center;
             white-space: nowrap;
-            animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
 
         .birthday-message.show-message {
             display: block;
+            transform: translate(-50%, -70%) scale(1);
         }
 
-        @keyframes popIn {
-            0% {
-                transform: translate(-50%, -30%) scale(0.2);
-                opacity: 0;
-            }
-            100% {
-                transform: translate(-50%, -70%) scale(1);
-                opacity: 1;
-            }
+        /* tombol keluar */
+        .exit-button {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffb6c1;
+            border: 4px solid white;
+            padding: 15px 40px;
+            border-radius: 60px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #a13d5e;
+            box-shadow: 0 10px 0 #ff7f8f;
+            cursor: pointer;
+            z-index: 4000;
+            display: none;
+            transition: 0.1s;
+            white-space: nowrap;
+        }
+
+        .exit-button:active {
+            transform: translateX(-50%) translateY(5px);
+            box-shadow: 0 5px 0 #ff7f8f;
+        }
+
+        .exit-button.show {
+            display: block;
+        }
+
+        /* pesan maaf */
+        .apology-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(255, 240, 230, 0.98);
+            padding: 35px 25px;
+            border-radius: 50px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #b84a5a;
+            border: 6px solid white;
+            box-shadow: 0 20px 0 #ffa07a;
+            z-index: 5000;
+            text-align: center;
+            line-height: 1.4;
+            width: 80%;
+            max-width: 350px;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: none;
+        }
+
+        .apology-message.show {
+            display: block;
+            transform: translate(-50%, -50%) scale(1);
         }
 
         .balloon-counter {
@@ -273,14 +361,6 @@
             margin-top: 10px;
             z-index: 20;
             position: relative;
-        }
-
-        .counter-badge {
-            background: #f58b8b;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 30px;
-            margin-left: 8px;
         }
 
         #birthday-audio {
@@ -300,7 +380,6 @@
             <p>✨ tap balon yang melayang ✨</p>
         </div>
 
-        <!-- area langit balon -->
         <div id="balloonSky" class="balloon-sky"></div>
 
         <div class="balloon-counter">
@@ -308,25 +387,30 @@
         </div>
     </div>
 
+    <!-- instruksi pencet kue -->
+    <div id="cakeInstruction" class="cake-instruction">
+        👆 pencet kue nya! 👆
+    </div>
+
     <div id="burstContainer" class="burst-container"></div>
-    <div id="flyingCake" class="flying-cake">🍰🎂🧁</div>
+    <div id="partyPopperContainer" class="party-popper-container"></div>
+    
+    <!-- kue tunggal -->
+    <div id="flyingCake" class="flying-cake">🍰</div>
+    
     <div id="birthdayMessage" class="birthday-message">🎉 HAPPY BIRTHDAY! 🎉</div>
+    
+    <!-- tombol keluar -->
+    <div id="exitButton" class="exit-button">✨ keluar ✨</div>
+    
+    <!-- pesan maaf -->
+    <div id="apologyMessage" class="apology-message">maaf ya telat ngucapin<br>semoga panjang umur ❤️</div>
 
     <script>
         (function() {
             const balloonColors = [
-                '#FF69B4', // hot pink
-                '#FFD700', // gold
-                '#87CEEB', // sky blue
-                '#98FB98', // pale green
-                '#FFA07A', // light salmon
-                '#DDA0DD', // plum
-                '#F0E68C', // khaki
-                '#FFB6C1', // light pink
-                '#F4A460', // sandy brown
-                '#E6E6FA', // lavender
-                '#FF8C00', // dark orange
-                '#40E0D0'  // turquoise
+                '#FF69B4', '#FFD700', '#87CEEB', '#98FB98', '#FFA07A', 
+                '#DDA0DD', '#F0E68C', '#FFB6C1', '#F4A460', '#E6E6FA'
             ];
 
             let activeBalloons = 9;
@@ -334,34 +418,35 @@
             const balloonSky = document.getElementById('balloonSky');
             const countSpan = document.getElementById('balloonCount');
             const burstContainer = document.getElementById('burstContainer');
+            const partyPopperContainer = document.getElementById('partyPopperContainer');
             const flyingCake = document.getElementById('flyingCake');
             const birthdayMessage = document.getElementById('birthdayMessage');
+            const cakeInstruction = document.getElementById('cakeInstruction');
+            const exitButton = document.getElementById('exitButton');
+            const apologyMessage = document.getElementById('apologyMessage');
             
             let audioCtx = null;
             let isPlaying = false;
+            let cakeClicked = false;
 
-            // Inisialisasi balon - mereka akan muncul di posisi horizontal acak
+            // Inisialisasi balon
             function initBalloons() {
                 balloonSky.innerHTML = '';
                 for (let i = 0; i < totalBalloons; i++) {
                     const balloon = document.createElement('div');
                     balloon.className = 'balloon';
                     
-                    // warna acak dari array
                     const colorIndex = i % balloonColors.length;
                     balloon.style.backgroundColor = balloonColors[colorIndex];
                     balloon.dataset.color = balloonColors[colorIndex];
                     
-                    // posisi horizontal acak (0% - 90% agar tidak keluar)
-                    const leftPos = Math.random() * 85; // %
+                    const leftPos = Math.random() * 85;
                     balloon.style.left = leftPos + '%';
                     
-                    // animasi berbeda tiap balon (delay & durasi variasi)
-                    const duration = 6 + Math.random() * 4; // 6-10 detik
-                    const delay = Math.random() * 3; // 0-3 detik delay
+                    const duration = 6 + Math.random() * 4;
+                    const delay = Math.random() * 3;
                     balloon.style.animation = `floatUp ${duration}s linear ${delay}s forwards`;
                     
-                    // rotasi awal sedikit variasi
                     const rotate = (Math.random() - 0.5) * 8;
                     balloon.style.transform = `rotate(${rotate}deg)`;
                     
@@ -378,22 +463,19 @@
 
                 const balloonColor = balloon.dataset.color || '#FF69B4';
 
-                // ledakkan love
+                // love particles
                 const loveCount = 6 + Math.floor(Math.random() * 5);
                 for (let i = 0; i < loveCount; i++) {
                     createLoveParticle(balloon, balloonColor);
                 }
 
-                // tandai popped dan sembunyikan
                 balloon.classList.add('popped');
                 
-                // kurangi counter
                 activeBalloons--;
                 countSpan.innerText = activeBalloons;
 
-                // cek semua balon sudah meledak?
                 if (activeBalloons === 0) {
-                    showCakeAndTrigger();
+                    showCakeAndInstruction();
                 }
             }
 
@@ -421,7 +503,80 @@
                 }, 1000);
             }
 
-            // Fungsi memutar lagu dengan Web Audio API (nada happy birthday)
+            // Party popper effect
+            function createPartyPopper() {
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(() => {
+                        const popper = document.createElement('div');
+                        popper.className = 'popper-particle';
+                        
+                        // random party emoji
+                        const emojis = ['🎉', '🎊', '✨', '🎈', '🎂', '💖', '🥳', '🎺'];
+                        popper.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                        
+                        const startX = window.innerWidth / 2;
+                        const startY = window.innerHeight / 2;
+                        
+                        popper.style.left = startX + 'px';
+                        popper.style.top = startY + 'px';
+                        
+                        const px = (Math.random() - 0.5) * 400;
+                        const py = (Math.random() - 0.5) * 400 - 100;
+                        
+                        popper.style.setProperty('--px', px + 'px');
+                        popper.style.setProperty('--py', py + 'px');
+                        popper.style.fontSize = (2 + Math.random() * 2) + 'rem';
+                        
+                        partyPopperContainer.appendChild(popper);
+                        
+                        setTimeout(() => {
+                            if (popper.parentNode) popper.remove();
+                        }, 1000);
+                    }, i * 50);
+                }
+            }
+
+            // Suara terompet (menggunakan Web Audio API)
+            function playTrumpetSound() {
+                try {
+                    if (!audioCtx) {
+                        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+                    
+                    if (audioCtx.state === 'suspended') {
+                        audioCtx.resume().then(() => { playTrumpet(); });
+                    } else {
+                        playTrumpet();
+                    }
+                } catch (e) {
+                    console.log('trumpet error', e);
+                }
+            }
+
+            function playTrumpet() {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                osc.type = 'sawtooth';
+                osc.frequency.value = 440;
+                
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 1);
+                
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                // nada terompet pendek
+                osc.frequency.setValueAtTime(523, now);
+                osc.frequency.setValueAtTime(659, now + 0.1);
+                osc.frequency.setValueAtTime(784, now + 0.2);
+                osc.frequency.setValueAtTime(523, now + 0.4);
+                
+                osc.start(now);
+                osc.stop(now + 0.8);
+            }
+
             function playHappyBirthdayTune() {
                 if (isPlaying) return;
                 try {
@@ -435,7 +590,6 @@
                         playTune();
                     }
                 } catch (e) {
-                    // fallback audio element
                     const audioElem = document.getElementById('birthday-audio');
                     audioElem.volume = 0.5;
                     audioElem.play().catch(er => console.log('fallback audio gagal'));
@@ -453,7 +607,6 @@
                 osc.type = 'sine';
                 osc.frequency.value = 440;
 
-                // nada happy birthday sederhana
                 const notes = [
                     392, 392, 440, 392, 523, 494,
                     392, 392, 440, 392, 587, 523,
@@ -486,30 +639,64 @@
                 };
             }
 
-            function showCakeAndTrigger() {
+            function showCakeAndInstruction() {
+                // munculkan instruksi
+                cakeInstruction.classList.add('show');
+                
+                // munculkan kue dari kecil membesar
                 flyingCake.classList.add('show');
-
+                
+                // tambahkan event ke kue (hanya sekali)
                 flyingCake.addEventListener('click', function onCakeClick() {
-                    birthdayMessage.classList.add('show-message');
-                    playHappyBirthdayTune();
-
-                    setTimeout(() => {
-                        birthdayMessage.classList.remove('show-message');
-                    }, 6000);
-
-                    // setelah diklik, kue menghilang? biarkan saja atau kita sembunyikan
+                    if (cakeClicked) return;
+                    cakeClicked = true;
+                    
+                    // sembunyikan instruksi
+                    cakeInstruction.classList.remove('show');
+                    
+                    // sembunyikan kue
                     flyingCake.classList.remove('show');
+                    
+                    // munculkan pesan happy birthday
+                    birthdayMessage.classList.add('show-message');
+                    
+                    // party popper effect
+                    createPartyPopper();
+                    
+                    // suara terompet
+                    playTrumpetSound();
+                    
+                    // setelah party popper, putar lagu happy birthday
+                    setTimeout(() => {
+                        playHappyBirthdayTune();
+                    }, 800);
+                    
+                    // setelah 5 detik, munculkan tombol keluar
+                    setTimeout(() => {
+                        exitButton.classList.add('show');
+                    }, 5000);
+                    
                     flyingCake.removeEventListener('click', onCakeClick);
                 });
             }
 
-            // Jalankan inisialisasi
+            // tombol keluar
+            exitButton.addEventListener('click', function() {
+                // sembunyikan tombol keluar dan pesan happy birthday
+                exitButton.classList.remove('show');
+                birthdayMessage.classList.remove('show-message');
+                
+                // munculkan pesan maaf
+                apologyMessage.classList.add('show');
+                
+                // sembunyikan setelah 4 detik
+                setTimeout(() => {
+                    apologyMessage.classList.remove('show');
+                }, 4000);
+            });
+
             initBalloons();
-
-            // tambahan: efek tambahan, ketika balon melayang, mereka bergoyang alami
-            // sudah ada di keyframes
-
         })();
     </script>
 </body>
-</html>
+    </html>
